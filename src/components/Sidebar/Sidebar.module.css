@@ -1,0 +1,49 @@
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    background: #778899;
+}
+
+.sidebar__logo {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar__list {
+    width: 100%;
+}
+
+.sidebar__elem {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar__link {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    transition: 0.2s;
+}
+
+.sidebar__link:hover {
+    background: white;
+    color: #000;
+}
+
+.sidebar__link_active {
+    background: dodgerblue;
+}
+
+.sidebar__logo-img svg path {
+    fill: #fff;
+}

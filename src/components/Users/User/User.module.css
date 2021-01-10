@@ -1,0 +1,24 @@
+.user {
+    margin-bottom: 40px;
+}
+
+.user__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user__head {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user__block {
+    width: 12%;
+}
+
+.user__button {
+    margin-top: 10px;
+}

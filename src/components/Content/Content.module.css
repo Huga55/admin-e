@@ -1,0 +1,15 @@
+.content {
+    width: calc(100% - 300px);
+    height: 100vh;
+    max-height: 100vh;
+    padding: 20px;
+    padding-top: 60px;
+    background: #B0C4DE;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.content__container {
+    width: 90%;
+    margin: 0 auto;
+}
