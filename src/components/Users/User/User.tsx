@@ -43,31 +43,31 @@ const User: React.FC<PropsType> = (props) => {
             </div>
             <div className={c.user}>
                 <div className={c.user__info}>
-                <span className={`${c.user__name} ${c.user__block}`}>
-                    Name
-                </span>
-                    <span className={`${c.user__phone} ${c.user__block}`}>
-                    8-952-684-56-99
-                </span>
-                    <span className={`${c.user__address} ${c.user__block}`}>
-                    Addres Addres Addres Addres Addres Addres
-                </span>
-                    <span className={`${c.user__type} ${c.user__block}`}>
-                    Физ. / Юр.
-                </span>
-                    <span className={`${c["user__name-organization"]} ${c.user__block}`}>
-                    Name Organization
-                </span>
-                    <span className={`${c.user__inn} ${c.user__block}`}>
-                    Inn
-                </span>
-                    <span className={`${c.user__ogrn} ${c.user__block}`}>
-                    OGRN
-                </span>
+                    <span className={`${c.user__name} ${c.user__block}`}>
+                        Name
+                    </span>
+                        <span className={`${c.user__phone} ${c.user__block}`}>
+                        8-952-684-56-99
+                    </span>
+                        <span className={`${c.user__address} ${c.user__block}`}>
+                        Addres Addres Addres Addres Addres Addres
+                    </span>
+                        <span className={`${c.user__type} ${c.user__block}`}>
+                        Физ. / Юр.
+                    </span>
+                        <span className={`${c["user__name-organization"]} ${c.user__block}`}>
+                        Name Organization
+                    </span>
+                        <span className={`${c.user__inn} ${c.user__block}`}>
+                        Inn
+                    </span>
+                        <span className={`${c.user__ogrn} ${c.user__block}`}>
+                        OGRN
+                    </span>
                 </div>
                 <div className={c.user__manage}>
                     <NavLink to={`/user/${id}`} className={c.user__button + " btn"}>
-                        Выбрать этого пользователя
+                        Выбрать
                     </NavLink>
                 </div>
             </div>
