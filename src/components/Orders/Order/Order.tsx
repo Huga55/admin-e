@@ -1,10 +1,16 @@
 import React from "react";
 import c from "./Order.module.css";
 
-const Order = () => {
+type PropsType = {
+    type: "list" | "info"
+}
+
+const Order: React.FC<PropsType> = (props) => {
+    const { type } = props;
+
     return (
         <div className={c.order}>
-            <div className={c.order__top}>
+            <div className={type === "list"? c.order__top : `${c.order__top} ${c.order__column}`}>
                 <div className={`${c.order__block} ${c["order__dostavista-id"]}`}>
                     Dostavista id
                 </div>
@@ -15,7 +21,7 @@ const Order = () => {
                     Order type
                 </div>
             </div>
-            <div className={c.order__bottom}>
+            <div className={type === "list"? c.order__bottom : `${c.order__bottom} ${c.order__column}`}>
                 <div className={`${c.order__block} ${c.order__from}`}>
                     <div className={c.order__address}>
                         Address

@@ -5,7 +5,7 @@ import Order from "./Order/Order";
 const Orders = () => {
     return(
         <div className={c.orders}>
-            <Order />
+            <Order type="list" />
         </div>
     );
 }

@@ -1,14 +1,25 @@
 .order {
-
+    padding: 15px;
+    background: white;
+    box-sizing: border-box;
+    border-radius: 10px;
 }
 
 .order__top {
+    margin-bottom: 10px;
     display: flex;
-    justify-content: space-between;
 }
 
 .order__bottom {
     display: flex;
     justify-content: space-between;
+}
+
+.order__column {
+    flex-direction: column;
+}
+
+.order__block {
+    margin-right: 7px;
 }
 
