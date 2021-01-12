@@ -1,0 +1,14 @@
+.order {
+
+}
+
+.order__top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.order__bottom {
+    display: flex;
+    justify-content: space-between;
+}
+

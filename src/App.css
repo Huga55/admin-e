@@ -30,7 +30,10 @@ body {
     display: inline-block;
     background: #fff;
     border-radius: 10px;
+    border:none;
     transition: 0.3s;
+    cursor: pointer;
+    text-transform: uppercase;
 }
 
 .btn:hover {

@@ -4,6 +4,7 @@
     border: 3px solid white;
     box-sizing: border-box;
     border-radius: 10px;
+    background: white;
 }
 
 .user__info {

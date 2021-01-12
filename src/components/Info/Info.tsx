@@ -7,6 +7,9 @@ const Info = () => {
             <div className={c.info__title + " title"}>
                 Пользователь: Иванов Иван Иванович
             </div>
+            <button className={c.info__back + " btn"}>
+                Назад
+            </button>
             <div className={c.info__user}>
                 <span className={`${c.info__name} ${c.info__block}`}>
                     Name
