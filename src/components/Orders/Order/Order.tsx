@@ -1,5 +1,7 @@
 import React from "react";
 import c from "./Order.module.css";
+import {NavLink} from "react-router-dom";
+import Docs from "./Docs/Docs";
 
 type PropsType = {
     type: "list" | "info"
@@ -7,6 +9,8 @@ type PropsType = {
 
 const Order: React.FC<PropsType> = (props) => {
     const { type } = props;
+
+    const id = 1;
 
     return (
         <div className={c.order}>
@@ -51,6 +55,15 @@ const Order: React.FC<PropsType> = (props) => {
                     Count of documents
                 </div>
             </div>
+            {
+                type === "list"?
+                    <NavLink to={`/order/${id}`} className={c.order__link + " btn"}>
+                        Выбрать
+                    </NavLink>
+                    :
+                    <Docs />
+            }
+
         </div>
     );
 }

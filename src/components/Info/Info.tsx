@@ -1,5 +1,6 @@
 import React from "react";
 import c from "./Info.module.css";
+import Orders from "../Orders/Orders";
 
 const Info = () => {
     return (
@@ -32,6 +33,9 @@ const Info = () => {
                 <span className={`${c.info__ogrn} ${c.info__block}`}>
                     OGRN
                 </span>
+            </div>
+            <div className={c.info__orders}>
+                <Orders />
             </div>
         </div>
     );
