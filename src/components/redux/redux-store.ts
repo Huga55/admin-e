@@ -1,8 +1,9 @@
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunkMiddleWare from "redux-thunk";
+import appReducer from "./app-reducer";
 
 let rootReducer = combineReducers({
-
+    app: appReducer,
 });
 
 type RootReducerType = typeof rootReducer;
