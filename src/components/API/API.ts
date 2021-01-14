@@ -13,7 +13,7 @@ export const authAPI = {
             .then(response => response.data);
     },
 
-    loginUser(data) {
+    loginUser(data: any) {
         return instance.post("auth/login", {...data})
             .then(response => response.data);
     },
@@ -23,14 +23,14 @@ export const authAPI = {
             .then(response => response.data);
     },
 
-    registerUser(data) {
+    registerUser(data: any) {
         return instance.post("auth/register", {...data})
             .then(response => response.data);
     }
 };
 
 export const userAPI = {
-    getAll(data) {
+    getAll(data: any) {
         return instance.post("user/getAll", {...data})
             .then(response => response.data);
     },
@@ -47,7 +47,7 @@ export const userAPI = {
 };
 
 export const orderAPI = {
-    getAll(data) {
+    getAll(data: any) {
         return instance.post("order/getAll", {...data})
             .then(response => response.data);
     },
