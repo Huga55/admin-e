@@ -11,35 +11,43 @@ const SET_DATE_CREATE_FILTER = "SET_DATE_CREATE_FILTER";
 const SET_SEARCH_FILTER = "SET_SEARCH_FILTER";
 const CLEAR_FILTERS = "CLEAR_FILTERS";
 const SET_CURRENT_DOCS = "SET_CURRENT_DOCS";
+const SET_COUNT_NEED = "SET_COUNT_NEED";
+const SET_COUNT_ORDERS = "SET_COUNT_ORDERS";
+const SET_CURRENT_ORDER = "SET_CURRENT_ORDER";
 
 type DirectionType = {
     name: string
-    phone: string[]
+    phone: string
 }
 
-type OrderType = {
+export type OrderType = {
     id: number
-    id_dostavista: number
+    idDostavista: number
     to: Array<DirectionType>
     from: Array<DirectionType>
-    address_dispatch: string
-    address_delivery: string
-    name: string
+    addressDispatch: string
+    addressDelivery: string
+    nameCargo: string
     type: string
-    docs_count: number
+    docsCount: number
     status: string
-    date_create: string
+    dateCreate: string
+    trackNumber: string
 }
 
 type DocType = {
     id: number
     name: string
     path: string
+    doc_type: string
 }
 
 const initialState = {
     orders: null as Array<OrderType> | null,
+    currentOrder: null as OrderType | null,
     currentPage: 1,
+    countNeed: 10,
+    countOrders: 0,
     countPages: 0,
     filters: {
         searchFilter: null as string | null,
@@ -56,7 +64,7 @@ const orderReducer = (state = initialState, action: ActionTypes): InitialStateTy
         case SET_ORDERS:
             return {
                 ...state,
-                users: action.orders,
+                orders: action.orders,
             }
         case SET_COUNT_PAGES:
             return {
@@ -107,6 +115,16 @@ const orderReducer = (state = initialState, action: ActionTypes): InitialStateTy
                 ...state,
                 currentDocs: action.docs,
             }
+        case SET_COUNT_ORDERS:
+            return {
+                ...state,
+                countOrders: action.count,
+            }
+        case SET_CURRENT_ORDER:
+            return {
+                ...state,
+                currentOrder: action.order,
+            }
         default:
             return state
     }
@@ -114,6 +132,7 @@ const orderReducer = (state = initialState, action: ActionTypes): InitialStateTy
 
 type ActionTypes = SetOrdersActionType | SetCurrentPageOrderActionType | SetCountPagesOrderActionType | SetNameFilterOrderActionType
     | SetDateCreateFilterOrderActionType | SetSearchFilterOrderActionType | ClearFiltersOrderActionType | SetCurrentDocsActionType
+    | SetCountNeedAction | SetCountOrdersActionType | SetCurrentOrderActionType
 
 type OtherActionTypes = SetIsAjaxActionType;
 
@@ -121,15 +140,17 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes |
 
 type SetOrdersActionType = {
     type: typeof SET_ORDERS
-    users: Array<OrderType>
+    orders: Array<OrderType>
 }
 
-export const setOrdersAction = (users: Array<OrderType>): SetOrdersActionType => ({type: SET_ORDERS, users});
+export const setOrdersAction = (orders: Array<OrderType>): SetOrdersActionType => ({type: SET_ORDERS, orders});
 
 export type OrdersFiltersType = {
     searchFilter: string | null,
     name: "asc" | "desc" | null,
     dateCreate: "asc" | "desc" | null,
+    currentPage: number,
+    countNeed: number,
 }
 
 type SetCurrentPageOrderActionType = {
@@ -180,25 +201,50 @@ type SetCurrentDocsActionType = {
 
 export const setCurrentDocsAction = (docs: Array<DocType>): SetCurrentDocsActionType => ({type: SET_CURRENT_DOCS, docs});
 
+type SetCountNeedAction = {
+    type: typeof SET_COUNT_NEED
+    count: number
+}
+
+export const setCountNeedAction = (count: number): SetCountNeedAction => ({type: SET_COUNT_NEED, count});
+
+type SetCountOrdersActionType = {
+    type: typeof SET_COUNT_ORDERS
+    count: number
+}
+
+export const setCountOrdersAction = (count: number): SetCountOrdersActionType => ({type: SET_COUNT_ORDERS, count});
+
+type SetCurrentOrderActionType = {
+    type: typeof SET_CURRENT_ORDER
+    order: OrderType
+}
+
+export const setCurrentOrderAction = (order: OrderType): SetCurrentOrderActionType => ({type: SET_CURRENT_ORDER, order});
+
 export const getOrders = (data: OrdersFiltersType): ThunkType => {
     return async (dispatch) => {
-        dispatch(setIsAjaxAction(true));
+        await dispatch(setIsAjaxAction(true));
         const response = await orderAPI.getAll(data);
         if(response.success) {
-            dispatch(setOrdersAction(response.data.orders));
+            await dispatch(setOrdersAction(response.data.orders));
+            await dispatch(setCountOrdersAction(response.data.count));
+            const countPages = Math.ceil( response.data.count / initialState.countNeed );
+            await dispatch(setCountPagesOrderAction(countPages));
         }
-        dispatch(setIsAjaxAction(false));
+        await dispatch(setIsAjaxAction(false));
     }
 }
 
 export const getOneOrder = (id: number): ThunkType => {
     return async (dispatch) => {
-        dispatch(setIsAjaxAction(true));
+        await dispatch(setIsAjaxAction(true));
         const response = await orderAPI.getOne(id);
         if(response.success) {
-            dispatch(setCurrentDocsAction(response.data));
+            await dispatch(setCurrentOrderAction(response.data));
+            await dispatch(setCurrentDocsAction(response.data.docs));
         }
-        dispatch(setIsAjaxAction(false));
+        await dispatch(setIsAjaxAction(false));
     }
 }
 

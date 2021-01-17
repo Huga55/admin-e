@@ -1,8 +1,14 @@
 .order {
     padding: 15px;
+    margin-bottom: 20px;
     background: white;
     box-sizing: border-box;
     border-radius: 10px;
+    color: #000;
+}
+
+.order__back {
+    margin-bottom: 20px;
 }
 
 .order__top {
@@ -20,10 +26,19 @@
 }
 
 .order__block {
-    margin-right: 7px;
+    margin-right: 20px;
+}
+
+.order__block_first {
+    order: -1;
 }
 
 .order__link {
     padding-left: 0;
     margin-top: 15px;
+}
+
+.order__create {
+    margin-right: 0;
+    margin-left: auto;
 }

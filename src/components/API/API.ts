@@ -1,9 +1,16 @@
 import axios from "axios";
+import {LoginType} from "../redux/profile-reducer";
+import {SendFileDataType} from "../Orders/Order/Docs/Docs";
 
-const instance = axios.create({
-    baseURL: 'https://express/api/',
+let token = null;
+if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+}
+
+export const instance = axios.create({
+    baseURL: 'http://express/api/admin/',
     headers: {
-        'api-key': '0861c10b-4ee2-4a6e-b799-407b779627f6',
+        'api-key': token,
     }
 });
 
@@ -13,7 +20,7 @@ export const authAPI = {
             .then(response => response.data);
     },
 
-    loginUser(data: any) {
+    loginUser(data: LoginType) {
         return instance.post("auth/login", {...data})
             .then(response => response.data);
     },
@@ -36,7 +43,7 @@ export const userAPI = {
     },
 
     getOne(id: number) {
-        return instance.get("user/getOne")
+        return instance.post("user/getOne", {id})
             .then(response => response.data);
     },
 
@@ -53,7 +60,7 @@ export const orderAPI = {
     },
 
     getOne(id: number) {
-        return instance.get("order/getOne")
+        return instance.get("order/getOne/" + id)
             .then(response => response.data);
     },
 
@@ -61,4 +68,23 @@ export const orderAPI = {
         return instance.delete("order/delete")
             .then(response => response.data);
     },
+
+    sendFile(data: SendFileDataType, order_id: string) {
+        const formData = new FormData();
+        formData.append("img", data.file);
+        return instance.post('order/file', {formData, doc_type: data.doc_type, doc_name: data.doc_name, order_id}, {
+            headers: {
+                "Content-Type": 'multipart/form-data',
+                "processData": false,
+                "contentType": false,
+            }
+        }).then(response => response.data);
+    },
 };
+
+export const dadataAPI = {
+    getAdrress(address: string) {
+        return instance.post("query/address", {address})
+            .then(response => response.data);
+    },
+}

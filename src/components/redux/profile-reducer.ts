@@ -1,5 +1,8 @@
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "./redux-store";
+import {authAPI, instance} from "../API/API";
+import {checkUser, setIsAjaxAction, SetIsAjaxActionType} from "./app-reducer";
+import {setLoginErrorAction, SetLoginErrorActionType} from "./form-reducer";
 
 const SET_INFO = "SET_INFO";
 
@@ -8,6 +11,7 @@ const initialState = {
     name: null as string | null,
     email: null as string | null,
     position: null as string | null,
+    status: null as boolean | null,
 }
 
 type InitialStateType = typeof initialState
@@ -21,6 +25,7 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
                 name: action.data.name,
                 email: action.data.email,
                 position: action.data.position,
+                status: action.data.status,
             }
         default:
             return state
@@ -29,20 +34,44 @@ const profileReducer = (state = initialState, action: ActionTypes): InitialState
 
 type ActionTypes = SetInfoActionType
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>;
+type OtherActionTypes = SetIsAjaxActionType | SetLoginErrorActionType
 
-type ProfileType = {
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes | OtherActionTypes>;
+
+export type ProfileType = {
     id: null | number
     name: null | string
     email: null | string
     position: null | string
+    status: null | boolean
 }
 
-type SetInfoActionType = {
+export type SetInfoActionType = {
     type: typeof SET_INFO
     data: ProfileType
 }
 
-export const setInfoAction = (data: ProfileType) => ({type: SET_INFO, data});
+export const setInfoAction = (data: ProfileType): SetInfoActionType => ({type: SET_INFO, data});
+
+export type LoginType = {
+    email: string
+    password: string
+}
+
+export const loginUser = (data: LoginType): ThunkType => {
+    return async (dispatch) => {
+        dispatch(setIsAjaxAction(true));
+        const response = await authAPI.loginUser(data);
+        if(response.success) {
+            //if authorization is true, then set token to local storage and to instance
+            window.localStorage.setItem("token", response.token);
+            instance.defaults.headers["api-key"] = response.token;
+            await dispatch((checkUser()));
+        }else {
+            dispatch(setLoginErrorAction("Неверно введен email или пароль"));
+        }
+        dispatch(setIsAjaxAction(false));
+    }
+}
 
 export default profileReducer;

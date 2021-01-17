@@ -1,0 +1,85 @@
+.docs__top {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.docs__main {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.docs__index {
+    width: 5%;
+}
+
+.docs__head {
+    margin-right: 30px;
+}
+
+.docs__td {
+    margin-right: 30px;
+}
+
+.docs__name {
+    width: 20%;
+}
+
+.docs__type {
+    width: 15%;
+}
+
+.docs__link {
+    width: 10%;
+}
+
+.docs__download {
+    color: #fff;
+}
+
+.docs__delete {
+    width: 10%;
+    cursor: pointer;
+}
+
+.docs__title {
+    margin-bottom: 15px;
+}
+
+.docs_none {
+    display: none;
+}
+
+.docs__form {
+    margin-top: 70px;
+    padding-top: 25px;
+    border-top: 3px solid #fff;
+}
+
+.docs__label {
+    padding: 5px;
+    background: #B0C4DE;
+    border: 3px solid #fff;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.docs__input {
+    max-width: 700px;
+    width: 100%;
+    margin-right: 20px;
+}
+
+.docs__radio {
+    width: 400px;
+    margin: 20px 0;
+}
+
+.docs__file-name {
+    margin-bottom: 15px;
+}
+
+.docs__button {
+    margin-right: 15px;
+}
