@@ -1,6 +1,8 @@
 import axios from "axios";
 import {LoginType} from "../redux/profile-reducer";
 import {SendFileDataType} from "../Orders/Order/Docs/Docs";
+import {OrdersFiltersType} from "../redux/order-reducer";
+import {UsersFiltersType} from "../redux/user-reducer";
 
 let token = null;
 if (typeof window !== "undefined") {
@@ -37,13 +39,13 @@ export const authAPI = {
 };
 
 export const userAPI = {
-    getAll(data: any) {
+    getAll(data: UsersFiltersType) {
         return instance.post("user/getAll", {...data})
             .then(response => response.data);
     },
 
     getOne(id: number) {
-        return instance.post("user/getOne", {id})
+        return instance.get(`user/getOne/${id}`)
             .then(response => response.data);
     },
 
@@ -54,8 +56,8 @@ export const userAPI = {
 };
 
 export const orderAPI = {
-    getAll(data: any) {
-        return instance.post("order/getAll", {...data})
+    getAll(data: OrdersFiltersType, userId: number | null) {
+        return instance.post("order/getAll", {...data, userId})
             .then(response => response.data);
     },
 
@@ -69,16 +71,24 @@ export const orderAPI = {
             .then(response => response.data);
     },
 
-    sendFile(data: SendFileDataType, order_id: string) {
+    sendFile(data: SendFileDataType, orderId: number) {
         const formData = new FormData();
-        formData.append("img", data.file);
-        return instance.post('order/file', {formData, doc_type: data.doc_type, doc_name: data.doc_name, order_id}, {
+        formData.append("file", data.file);
+        formData.append("doc_type", data.doc_type);
+        formData.append("doc_name", data.doc_name);
+        formData.append("orderId", orderId + "");
+        return instance.post('order/file', formData, {
             headers: {
                 "Content-Type": 'multipart/form-data',
                 "processData": false,
                 "contentType": false,
             }
         }).then(response => response.data);
+    },
+
+    deleteFile(id: number) {
+        return instance.post('order/file/delete', {id})
+            .then(response => response.data);
     },
 };
 

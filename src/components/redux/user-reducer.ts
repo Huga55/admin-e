@@ -4,6 +4,7 @@ import {userAPI} from "../API/API";
 import {setIsAjaxAction, SetIsAjaxActionType} from "./app-reducer";
 
 const SET_USERS = "SET_USERS";
+const SET_CURRENT_USER = "SET_CURRENT_USER";
 const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 const SET_COUNT_PAGES = "SET_COUNT_PAGES";
 const SET_NAME_FILTER = "SET_NAME_FILTER";
@@ -11,22 +12,29 @@ const SET_DATE_CREATE_FILTER = "SET_DATE_CREATE_FILTER";
 const SET_SEARCH_FILTER = "SET_SEARCH_FILTER";
 const CLEAR_FILTERS = "CLEAR_FILTERS";
 
-type UserType = {
+export type UserType = {
     id: number,
     name: string,
     type: string,
     name_organization: null | string,
+    inn: string,
+    ogrn: string,
+    address: string,
+    phone: string,
 }
 
 const initialState = {
     users: null as Array<UserType> | null,
     currentPage: 1,
     countPages: 0,
+    countNeed: 10,
+    countUsers: 0,
     filters: {
         searchFilter: null as string | null,
         name: null as "asc" | "desc" | null,
         dateCreate: null as "asc" | "desc" | null,
-    }
+    },
+    currentUser: null as UserType | null,
 }
 
 type InitialStateType = typeof initialState
@@ -37,6 +45,7 @@ const userReducer = (state = initialState, action: ActionTypes): InitialStateTyp
             return {
                 ...state,
                 users: action.users,
+                countUsers: action.count,
             }
         case SET_COUNT_PAGES:
             return {
@@ -82,13 +91,18 @@ const userReducer = (state = initialState, action: ActionTypes): InitialStateTyp
                     name: null,
                 }
             }
+        case SET_CURRENT_USER:
+            return {
+                ...state,
+                currentUser: action.data,
+            }
         default:
             return state
     }
 }
 
 type ActionTypes = SetUsersActionType | SetCurrentPageUserActionType | SetCountPagesUserActionType | SetNameFilterUserActionType
-    | SetDateCreateFilterUserActionType | SetSearchFilterUserActionType | ClearFiltersUserActionType
+    | SetDateCreateFilterUserActionType | SetSearchFilterUserActionType | ClearFiltersUserActionType | SetCurrentUserActionType
 
 type OtherActionTypes = SetIsAjaxActionType;
 
@@ -97,14 +111,17 @@ type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes |
 type SetUsersActionType = {
     type: typeof SET_USERS
     users: Array<UserType>
+    count: number
 }
 
-export const setUsersAction = (users: Array<UserType>): SetUsersActionType => ({type: SET_USERS, users});
+export const setUsersAction = (users: Array<UserType>, count: number): SetUsersActionType => ({type: SET_USERS, users, count});
 
 export type UsersFiltersType = {
     searchFilter: string | null,
     name: "asc" | "desc" | null,
     dateCreate: "asc" | "desc" | null,
+    currentPage: number,
+    countNeed: number,
 }
 
 type SetCurrentPageUserActionType = {
@@ -148,12 +165,19 @@ type ClearFiltersUserActionType = {
 
 export const clearFiltersUserAction = (): ClearFiltersUserActionType => ({type: CLEAR_FILTERS});
 
+type SetCurrentUserActionType = {
+    type: typeof SET_CURRENT_USER
+    data: UserType
+}
+
+export const setCurrentUserAction = (data: UserType): SetCurrentUserActionType => ({type: SET_CURRENT_USER, data});
+
 export const getUsers = (data: UsersFiltersType): ThunkType => {
     return async (dispatch) => {
         dispatch(setIsAjaxAction(true));
         const response = await userAPI.getAll(data);
         if(response.success) {
-            dispatch(setUsersAction(response.data.users));
+            dispatch(setUsersAction(response.data.users, response.data.count));
         }
         dispatch(setIsAjaxAction(false));
     }
@@ -164,7 +188,7 @@ export const getOneUser = (id: number): ThunkType => {
         dispatch(setIsAjaxAction(true));
         const response = await userAPI.getOne(id);
         if(response.success) {
-
+            dispatch(setCurrentUserAction(response.data));
         }
         dispatch(setIsAjaxAction(false));
     }

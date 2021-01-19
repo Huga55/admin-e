@@ -2,6 +2,7 @@ import {setIsAjaxAction, SetIsAjaxActionType} from "./app-reducer";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "./redux-store";
 import {orderAPI} from "../API/API";
+import {SendFileDataType} from "../Orders/Order/Docs/Docs";
 
 const SET_ORDERS = "SET_ORDERS";
 const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
@@ -222,10 +223,10 @@ type SetCurrentOrderActionType = {
 
 export const setCurrentOrderAction = (order: OrderType): SetCurrentOrderActionType => ({type: SET_CURRENT_ORDER, order});
 
-export const getOrders = (data: OrdersFiltersType): ThunkType => {
+export const getOrders = (data: OrdersFiltersType, userId = null): ThunkType => {
     return async (dispatch) => {
         await dispatch(setIsAjaxAction(true));
-        const response = await orderAPI.getAll(data);
+        const response = await orderAPI.getAll(data, userId);
         if(response.success) {
             await dispatch(setOrdersAction(response.data.orders));
             await dispatch(setCountOrdersAction(response.data.count));
@@ -243,6 +244,28 @@ export const getOneOrder = (id: number): ThunkType => {
         if(response.success) {
             await dispatch(setCurrentOrderAction(response.data));
             await dispatch(setCurrentDocsAction(response.data.docs));
+        }
+        await dispatch(setIsAjaxAction(false));
+    }
+}
+
+export const sendFile = (data: SendFileDataType, orderId: number): ThunkType => {
+    return async (dispatch) => {
+        await dispatch(setIsAjaxAction(true));
+        const response = await orderAPI.sendFile(data, orderId);
+        if(response.success) {
+
+        }
+        await dispatch(setIsAjaxAction(false));
+    }
+}
+
+export const deleteFile = (id: number): ThunkType => {
+    return async (dispatch) => {
+        await dispatch(setIsAjaxAction(true));
+        const response = await orderAPI.deleteFile(id);
+        if(response.success) {
+
         }
         await dispatch(setIsAjaxAction(false));
     }

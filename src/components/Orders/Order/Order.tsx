@@ -12,7 +12,7 @@ type PropsType = {
     info?: OrderType
 }
 
-interface ParamsType {
+export interface ParamsType {
     id: string
 }
 
@@ -126,7 +126,7 @@ const Order: React.FC<PropsType> = (props) => {
                 }
             </div>
             {
-                isInfo? <Docs /> : ""
+                isInfo? <Docs orderId={infoOrder? infoOrder.id : 0}/> : ""
             }
         </>
     );

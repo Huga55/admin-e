@@ -1,13 +1,19 @@
 import React, {useState} from "react";
 import c from "./Docs.module.css";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../redux/redux-store";
 import Label from "../../../common/Label/Lable";
 import Input from "../../../common/Input/Input";
 import {FormProvider, useForm} from "react-hook-form";
 import Radios from "../../../common/Radios/Radios";
+import {deleteFile, getOneOrder, sendFile} from "../../../redux/order-reducer";
+import {getValidateProps} from "../../../utils/validate/validate";
+import {useParams} from "react-router-dom";
+import {ParamsType} from "../Order";
 
-type PropsType = any;
+type PropsType = {
+    orderId: number
+};
 
 export type SendFileDataType = {
     file: any
@@ -19,18 +25,34 @@ const Docs: React.FC<PropsType> = (props) => {
     const [fileInfo, setFileInfo] = useState(null);
     const docs = useSelector((state: AppStateType) => state.orders.currentDocs);
 
+    const { orderId } = props;
+
+    const {id} = useParams<ParamsType>();
+
+    const dispatch = useDispatch();
+
     const methods = useForm({
         shouldFocusError: false
     });
 
     const { handleSubmit, register, errors, setValue } = methods;
 
-    const deleteDoc = (id: number) => {
-
+    const deleteDoc = async (docId: number) => {
+        await dispatch(deleteFile(docId));
+        await dispatch(getOneOrder(Number(id)));
     }
 
-    const sendForm = (data: SendFileDataType) => {
+    const sendForm = async (data: SendFileDataType) => {
         console.log(data);
+        const sendData = {
+            doc_name: data.doc_name,
+            doc_type: data.doc_type,
+            file: data.file[0],
+        }
+        await dispatch(sendFile(sendData, orderId));
+        await dispatch(getOneOrder(Number(id)));
+        await setFileInfo(null);
+        await setValue("file", null);
     }
 
     const changeInput = (e: any) => {
@@ -41,11 +63,12 @@ const Docs: React.FC<PropsType> = (props) => {
     const cancelForm = (e: any) => {
         e.preventDefault();
         setFileInfo(null);
-        setValue("doc", null);
+        setValue("file", null);
     }
 
     return(
         <div className={c.docs}>
+            <div className={c.docs__subtitle + " title"}>Документы</div>
             {
                 docs && docs.length?
                     <div className={c.docs__window}>
@@ -70,7 +93,7 @@ const Docs: React.FC<PropsType> = (props) => {
                             {
                                 docs.map( (d, index) => {
                                     return(
-                                        <React.Fragment key={index}>
+                                        <div key={index} className={c.docs__row}>
                                             <div className={`${c.docs__td} ${c.docs__index}`}>
                                                 {index + 1}
                                             </div>
@@ -81,12 +104,12 @@ const Docs: React.FC<PropsType> = (props) => {
                                                 {d.doc_type}
                                             </div>
                                             <div className={`${c.docs__td} ${c.docs__link}`}>
-                                                <a className={c.docs__download} href={d.path} target="_blank">Скачать</a>
+                                                <a className={c.docs__download} href={d.path} target="_blank" download={true}>Скачать</a>
                                             </div>
                                             <div className={`${c.docs__td} ${c.docs__delete}`} onClick={() => deleteDoc(d.id)}>
                                                 Удалить
                                             </div>
-                                        </React.Fragment>
+                                        </div>
                                     );
                                 })
                             }
@@ -97,7 +120,7 @@ const Docs: React.FC<PropsType> = (props) => {
 
                 <FormProvider {...methods}>
                     <form className={c.docs__form} onSubmit={handleSubmit(sendForm)}>
-                        <input type="file" name="doc" id="download-doc" className={c.docs_none}
+                        <input type="file" name="file" id="download-doc" className={c.docs_none}
                                onChange={(e) => changeInput(e)} ref={register}/>
                         {!fileInfo?
                             <>
@@ -117,7 +140,8 @@ const Docs: React.FC<PropsType> = (props) => {
                                 </div>
                                 <Input className={c.docs__input} name="doc_name" type=""
                                        placeholder="Название документа"
-                                       error={true} register={register}/>
+                                       error={true} register={register}
+                                       validateProps={getValidateProps({standart: ["required"], custom: []})}/>
                                 <Radios className={c.docs__radio} name="doc_type" inputs={[
                                     {value: "Бухгалтерский", html: "Бухгалтерский", afterId: "buh", beforeId: "doc", register},
                                     {value: "Иной", html: "Иной", afterId: "other", beforeId: "doc", register}
