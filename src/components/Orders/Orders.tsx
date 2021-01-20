@@ -6,9 +6,16 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../redux/redux-store";
 import Manage from "../common/Manage/Manage";
 
-const Orders = () => {
+type PropsType = {
+    userId: number | null
+}
+
+const Orders: React.FC<PropsType> = (props) => {
+    const [userIdState, setUserIdState] = useState(null);
     const { currentPage, countPages, countNeed, orders, countOrders } = useSelector((state: AppStateType) => state.orders);
     const [currentPageOfManage, setCurrentPageOfManage] = useState(currentPage);
+
+    const { userId } = props;
 
     const dispatch = useDispatch();
 
@@ -20,13 +27,19 @@ const Orders = () => {
         changeCurrentPage();
     }, [currentPageOfManage])
 
+    useEffect(() => {
+        if(userId) {
+            changeCurrentPage();
+        }
+    }, [userId])
+
     const changeCurrentPage = async () => {
         await dispatch(setCurrentPageOrderAction(currentPageOfManage));
         await getOrdersWithFilters();
     }
 
     const getOrdersWithFilters = (searchFilter = null, name = null, dateCreate = null) => {
-        dispatch(getOrders({searchFilter, name, dateCreate, currentPage: currentPageOfManage, countNeed}));
+        dispatch(getOrders({searchFilter, name, dateCreate, currentPage: currentPageOfManage, countNeed, userId}));
     }
 
     return(

@@ -13,7 +13,7 @@ const Content = () => {
             <div className={c.content__container}>
                 <Route exact path="/" render={() => <Main />} />
                 <Route path="/users" render={() => <Users />}/>
-                <Route path="/orders" render={() => <Orders />}/>
+                <Route path="/orders" render={() => <Orders userId={null}/>}/>
                 <Route path="/page" render={() => <div>Page</div>}/>
                 <Route path="/user/:id" render={() => <Info />} />
                 <Route path="/order/:id" render={() => <Order type="info" />} />

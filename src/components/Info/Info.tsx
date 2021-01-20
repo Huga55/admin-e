@@ -19,9 +19,6 @@ const Info = () => {
         dispatch(getOneUser(Number(id)));
     }, [])
 
-    const getBack = () => {
-
-    }
 
     return (
         <div className={c.info}>
@@ -55,7 +52,11 @@ const Info = () => {
                 </span>
             </div>
             <div className={c.info__orders}>
-                <Orders />
+                {
+                    currentUser?
+                        <Orders userId={Number(id)}/> : ""
+                }
+
             </div>
         </div>
     );

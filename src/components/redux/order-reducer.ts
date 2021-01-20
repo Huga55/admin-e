@@ -152,6 +152,7 @@ export type OrdersFiltersType = {
     dateCreate: "asc" | "desc" | null,
     currentPage: number,
     countNeed: number,
+    userId: number | null
 }
 
 type SetCurrentPageOrderActionType = {
@@ -223,10 +224,10 @@ type SetCurrentOrderActionType = {
 
 export const setCurrentOrderAction = (order: OrderType): SetCurrentOrderActionType => ({type: SET_CURRENT_ORDER, order});
 
-export const getOrders = (data: OrdersFiltersType, userId = null): ThunkType => {
+export const getOrders = (data: OrdersFiltersType): ThunkType => {
     return async (dispatch) => {
         await dispatch(setIsAjaxAction(true));
-        const response = await orderAPI.getAll(data, userId);
+        const response = await orderAPI.getAll(data);
         if(response.success) {
             await dispatch(setOrdersAction(response.data.orders));
             await dispatch(setCountOrdersAction(response.data.count));

@@ -11,6 +11,7 @@ if (typeof window !== "undefined") {
 
 export const instance = axios.create({
     baseURL: 'http://express/api/admin/',
+    //baseURL: 'https://expressapi.agaev.digital/api/admin/',
     headers: {
         'api-key': token,
     }
@@ -56,8 +57,8 @@ export const userAPI = {
 };
 
 export const orderAPI = {
-    getAll(data: OrdersFiltersType, userId: number | null) {
-        return instance.post("order/getAll", {...data, userId})
+    getAll(data: OrdersFiltersType) {
+        return instance.post("order/getAll", {...data})
             .then(response => response.data);
     },
 

@@ -177,9 +177,11 @@ export const getUsers = (data: UsersFiltersType): ThunkType => {
         dispatch(setIsAjaxAction(true));
         const response = await userAPI.getAll(data);
         if(response.success) {
-            dispatch(setUsersAction(response.data.users, response.data.count));
+            const countPages = Math.ceil( response.data.count / initialState.countNeed );
+            await dispatch(setUsersAction(response.data.users, response.data.count));
+            await dispatch(setCountPagesUserAction(countPages));
         }
-        dispatch(setIsAjaxAction(false));
+        await dispatch(setIsAjaxAction(false));
     }
 }
 

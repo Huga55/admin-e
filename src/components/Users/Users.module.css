@@ -9,3 +9,32 @@
 .users__content {
     color: #000;
 }
+
+.users__count {
+    margin-bottom: 15px;
+}
+
+.users__minititle {
+    margin-bottom: 10px;
+}
+
+.users__list {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+}
+
+.users__name {
+    display: flex;
+    margin-right: 100px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.users__create {
+    display: flex;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
