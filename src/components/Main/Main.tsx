@@ -8,7 +8,7 @@ import {getValidateProps} from "../utils/validate/validate";
 import Label from "../common/Label/Lable";
 
 const Main = () => {
-    const [isChange, setIsChange] = useState(true);
+    const [isChange, setIsChange] = useState(false);
 
     const {id, name, email, position} = useSelector((state: AppStateType) => state.profile);
 

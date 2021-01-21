@@ -6,6 +6,7 @@ import Info from "../Info/Info";
 import Orders from "../Orders/Orders";
 import Order from "../Orders/Order/Order";
 import Main from "../Main/Main";
+import Page from "../Page/Page";
 
 const Content = () => {
     return(
@@ -14,9 +15,9 @@ const Content = () => {
                 <Route exact path="/" render={() => <Main />} />
                 <Route path="/users" render={() => <Users />}/>
                 <Route path="/orders" render={() => <Orders userId={null}/>}/>
-                <Route path="/page" render={() => <div>Page</div>}/>
                 <Route path="/user/:id" render={() => <Info />} />
                 <Route path="/order/:id" render={() => <Order type="info" />} />
+                <Route path="/page" render={() => <Page />} />
             </div>
         </div>
     );
