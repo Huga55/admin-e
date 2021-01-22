@@ -7,6 +7,7 @@ import errorsReducer from "./errors-reducer";
 import formReducer from "./form-reducer";
 import orderReducer from "./order-reducer";
 import {composeWithDevTools} from "redux-devtools-extension";
+import pageReducer from "./page-reducer";
 
 let rootReducer = combineReducers({
     app: appReducer,
@@ -15,6 +16,7 @@ let rootReducer = combineReducers({
     errors: errorsReducer,
     forms: formReducer,
     orders: orderReducer,
+    page: pageReducer,
 });
 
 const initialState = {};

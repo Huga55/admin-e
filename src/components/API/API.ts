@@ -10,8 +10,8 @@ if (typeof window !== "undefined") {
 }
 
 export const instance = axios.create({
-    baseURL: 'http://express/api/admin/',
-    //baseURL: 'https://expressapi.agaev.digital/api/admin/',
+    //baseURL: 'http://express/api/admin/',
+    baseURL: 'https://expressapi.agaev.digital/api/admin/',
     headers: {
         'api-key': token,
     }

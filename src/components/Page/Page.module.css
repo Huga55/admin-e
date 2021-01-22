@@ -8,6 +8,11 @@
     margin-top: 5px;
 }
 
+.pages__subtitle {
+    margin: 10px 0;
+    font-size: 20px;
+}
+
 .pages__td {
     width: 100px;
     margin: 5px;
@@ -20,13 +25,22 @@
 .pages__add {
     width: 100px;
     height: 30px;
+    margin: 6px 0;
+}
+
+.pages__column {
+    width: 100px;
     position: absolute;
     right: -100px;
-    top: 5px;
+    top: 0px;
 }
 
 .pages__delete {
     width: 100px;
     height: 30px;
     margin: 5px;
+}
+
+.pages__button_green {
+    background: chartreuse;
 }
