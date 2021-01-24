@@ -272,4 +272,15 @@ export const deleteFile = (id: number): ThunkType => {
     }
 }
 
+export const deleteOrder = (id: number): ThunkType => {
+    return async (dispatch) => {
+        await dispatch(setIsAjaxAction(true));
+        const response = await orderAPI.delete(id);
+        if(response.sucess) {
+            
+        }
+        await dispatch(setIsAjaxAction(false));
+    }
+}
+
 export default orderReducer;

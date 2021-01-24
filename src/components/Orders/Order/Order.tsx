@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import c from "./Order.module.css";
 import {NavLink, useParams} from "react-router-dom";
 import Docs from "./Docs/Docs";
-import {getOneOrder, OrderType} from "../../redux/order-reducer";
+import {deleteOrder, getOneOrder, OrderType} from "../../redux/order-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../redux/redux-store";
 
@@ -10,6 +10,7 @@ type PropsType = {
     type: "list" | "info"
     index?: number
     info?: OrderType
+    setToNeedRefresh?: (status: boolean) => void
 }
 
 export interface ParamsType {
@@ -18,8 +19,9 @@ export interface ParamsType {
 
 const Order: React.FC<PropsType> = (props) => {
     const [infoOrder, setInfoOrder] = useState<null | OrderType | undefined>(null);
+    const [isDelete, setIsDelete] = useState(false);
 
-    const {type, index, info} = props;
+    const {type, index, info, setToNeedRefresh} = props;
 
     const {id} = useParams<ParamsType>();
 
@@ -49,9 +51,22 @@ const Order: React.FC<PropsType> = (props) => {
         }
     }, [info])
 
+    const deleteCurrentOrder = async (currentId: number | null) => {
+        if(currentId) {
+            await dispatch(deleteOrder(currentId));
+            if(!info) {
+                await dispatch(getOneOrder(Number(id)));
+            }
+            if(setToNeedRefresh) {
+                //update orders after delete one
+                setToNeedRefresh(true);
+            }
+        }
+    }
+
     return (
         <>
-            {isInfo ? <NavLink to="/orders" className={c.order__back + " btn"}>Назад</NavLink> : ""}
+            {isInfo ? <span onClick={() => window.history.back()} className={c.order__back + " btn"}>Назад</span> : ""}
             <div className={c.order}>
                 <div className={type === "list" ? c.order__top : `${c.order__top} ${c.order__column}`}>
                     <div className={`${c.order__block} ${c["order__dostavista-id"]}`}>
@@ -124,6 +139,18 @@ const Order: React.FC<PropsType> = (props) => {
                         </NavLink>
                         : ""
                 }
+                {
+                    infoOrder?.status !== "completed" && infoOrder?.status !== "canceled" ?
+                        <span onClick={() => setIsDelete(!isDelete)} className={c.order__destroy}
+                              onBlur={() => setIsDelete(false)} tabIndex={0}>
+                                <span className={c.order__delete}>Отменить заказ</span>
+                                {
+                                    isDelete ? <span className={c.order__exact}
+                                                     onClick={() => deleteCurrentOrder(infoOrder ? infoOrder.id : null)}>Отменить безвозвратно!</span> : ""
+                                }
+                        </span> : ""
+                }
+
             </div>
             {
                 isInfo? <Docs orderId={infoOrder? infoOrder.id : 0}/> : ""

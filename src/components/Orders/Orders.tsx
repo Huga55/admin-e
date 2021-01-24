@@ -12,6 +12,7 @@ type PropsType = {
 
 const Orders: React.FC<PropsType> = (props) => {
     const [userIdState, setUserIdState] = useState(null);
+    const [toNeedRefresh, setToNeedRefresh] = useState(false);
     const { currentPage, countPages, countNeed, orders, countOrders } = useSelector((state: AppStateType) => state.orders);
     const [currentPageOfManage, setCurrentPageOfManage] = useState(currentPage);
 
@@ -33,6 +34,13 @@ const Orders: React.FC<PropsType> = (props) => {
         }
     }, [userId])
 
+    useEffect(() => {
+        if(toNeedRefresh) {
+            getOrdersWithFilters();
+            setToNeedRefresh(false);
+        }
+    }, [toNeedRefresh])
+
     const changeCurrentPage = async () => {
         await dispatch(setCurrentPageOrderAction(currentPageOfManage));
         await getOrdersWithFilters();
@@ -52,7 +60,7 @@ const Orders: React.FC<PropsType> = (props) => {
             </div>
             {
                 orders? orders.map((o, index) => {
-                    return <Order type="list" info={o} index={index}/>
+                    return <Order type="list" info={o} index={index} setToNeedRefresh={setToNeedRefresh}/>
                 }) : ""
             }
             <Manage countPages={countPages} currentPage={currentPage}

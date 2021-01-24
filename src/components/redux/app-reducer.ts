@@ -2,6 +2,7 @@ import {AppStateType} from "./redux-store";
 import {ThunkAction} from "redux-thunk";
 import {authAPI} from "../API/API";
 import {setInfoAction, SetInfoActionType} from "./profile-reducer";
+import {getDataPage} from "./page-reducer";
 
 const SET_IS_READY = "SET_IS_READY";
 const SET_IS_AJAX = "SET_IS_AJAX";
@@ -70,6 +71,7 @@ export const checkUser = (): ThunkType => {
         const response = await authAPI.checkUser();
         if(response.success) {
             await dispatch(setInfoAction(response.data));
+            await dispatch(getDataPage());
         }
         await dispatch(setIsAuthAction(response.success));
         await dispatch(setIsReadyAction(true));

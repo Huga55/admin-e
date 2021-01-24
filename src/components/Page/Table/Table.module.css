@@ -1,0 +1,109 @@
+.table {
+    margin-bottom: 50px;
+}
+
+.table__title {
+    margin-bottom: 25px;
+}
+
+.table__input {
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+.table__title {
+    margin: 10px 0;
+    font-size: 20px;
+}
+
+.table__subtitle {
+    margin-bottom: 15px;
+}
+
+.table__td {
+    width: 100px;
+    margin: 5px;
+}
+
+.table__table {
+    position: relative;
+}
+
+.table__right {
+    display: flex;
+    align-items: center;
+}
+
+.table__add {
+    width: 100px;
+    height: 30px;
+    margin: 5px;
+    background: chartreuse;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #000;
+}
+
+.table__column {
+    width: 100px;
+    position: absolute;
+    right: -100px;
+    top: 0px;
+}
+
+.table__delete {
+    width: 100px;
+    height: 30px;
+    margin: 5px;
+    background: tomato;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.table__button_green {
+    background: chartreuse;
+}
+
+.table__move {
+    margin-left: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.table__direction {
+    height: 20px;
+    width: 20px;
+    padding-bottom: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #000;
+    font-size: 18px;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+
+.table__direction:hover {
+    opacity: 0.6;
+}
+
+.table__up {
+    margin-right: 5px;
+}
+
+.table__bot {
+    display: flex;
+    justify-content: center;
+    transform: translateY(10px);
+}
+
+.table__none {
+    opacity: 0;
+}
+
+.table__irregular {
+    display: flex;
+}

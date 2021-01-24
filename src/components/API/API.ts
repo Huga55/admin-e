@@ -10,8 +10,8 @@ if (typeof window !== "undefined") {
 }
 
 export const instance = axios.create({
-    //baseURL: 'http://express/api/admin/',
-    baseURL: 'https://expressapi.agaev.digital/api/admin/',
+    baseURL: 'http://express/api/admin/',
+    //baseURL: 'https://expressapi.agaev.digital/api/admin/',
     headers: {
         'api-key': token,
     }
@@ -68,7 +68,7 @@ export const orderAPI = {
     },
 
     delete(id: number) {
-        return instance.delete("order/delete")
+        return instance.post("order/delete", {id})
             .then(response => response.data);
     },
 
@@ -92,6 +92,18 @@ export const orderAPI = {
             .then(response => response.data);
     },
 };
+
+export const pageAPI = {
+    sendData(data: any) {
+        return instance.post("page/set", {...data})
+            .then(response => response.data);
+    },
+
+    getData() {
+        return instance.get("page/get")
+            .then(response => response.data);
+    },
+}
 
 export const dadataAPI = {
     getAdrress(address: string) {

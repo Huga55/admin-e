@@ -1,4 +1,10 @@
 import {DataTableType} from "../Page/Page";
+import {PosibilityType} from "../Page/Posibility/Posibility";
+import {AdditionalType} from "../Page/Additional/Additional";
+import {ThunkAction} from "redux-thunk";
+import {AppStateType} from "./redux-store";
+import {setIsAjaxAction, SetIsAjaxActionType} from "./app-reducer";
+import {pageAPI} from "../API/API";
 
 const SET_PAGE_DATA = "SET_PAGE_DATA";
 const ADD_ROW = "ADD_ROW";
@@ -11,16 +17,10 @@ const initialState = {
     titleTop: null as string | null,
     titleMain: null as string | null,
     titleDoc: null as string | null,
-    table: {
-        head: ["Вес, кг", "Зона 1", "Зона 2", "Зона 3", "Зона 4", "Зона 5"],
-        body: [
-            ["0,5", "1010", "1596", "1848", "1987", "2198"],
-            ["0,5", "1010", "1596", "1848", "1987", "2198"],
-            ["0,5", "1010", "1596", "1848", "1987", "2198"],
-            ["0,5", "1010", "1596", "1848", "1987", "2198"],
-            ["0,5", "1010", "1596", "1848", "1987", "2198"]
-        ],
-    } as DataTableType | null,
+    table: null as DataTableType | null,
+    posibilities: null as PosibilityType | null,
+    services: null as PosibilityType | null,
+    additional: null as AdditionalType | null,
 }
 
 type InitialStateType = typeof initialState
@@ -32,52 +32,26 @@ const pageReducer = (state = initialState, action: ActionTypes): InitialStateTyp
                 ...state,
                 ...action.data
             }
-        case ADD_COLUMN:
-            return {
-                ...state,
-                table: state.table? {
-                    head: [...state.table.head, ""],
-                    body: state.table.body.map((arr) => [...arr, ""]),
-                } : null,
-            }
-        case ADD_ROW:
-            return {
-                ...state,
-                table: state.table? {
-                    head: state.table.head,
-                    body: [...state.table.body, Array.from([...state.table.body[0]], (t) => "")],
-                } : null,
-            }
-        case DELETE_ROW:
-            return {
-                ...state,
-                table: state.table? {
-                    ...state.table,
-                    body: state.table.body.filter((c, index) => index !== action.index),
-                } : null
-            }
-        case DELETE_COLUMN:
-            return {
-                ...state,
-                table: state.table? {
-                    head: state.table.head.filter((c, index) => index !== action.index),
-                    body: state.table.body.map((arr) => arr.filter((c, index) => index !== action.index)),
-                } : null
-            }
         default:
             return state
     }
 }
 
-type ActionTypes = SetPageDataActionType | AddRowActionType | AddColumnActionType | DeleteRowActionType
-                | DeleteColumnActionType
+type ActionTypes = SetPageDataActionType
 
-type PageData = {
+type OtherActionTypes = SetIsAjaxActionType
+
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes | OtherActionTypes>;
+
+export type PageData = {
     name: string
     titleTop: string
     titleMain: string
     titleDoc: string
     tabel: DataTableType
+    posibilities: PosibilityType
+    services: PosibilityType
+    additional: AdditionalType
 }
 
 type SetPageDataActionType = {
@@ -87,30 +61,27 @@ type SetPageDataActionType = {
 
 const setPageDataAction = (data: PageData): SetPageDataActionType => ({type: SET_PAGE_DATA, data});
 
-type AddRowActionType = {
-    type: typeof ADD_ROW
+export const sendDataPage = (data: any): ThunkType => {
+    return async (dispatch) => {
+        await dispatch(setIsAjaxAction(true));
+        const response = await pageAPI.sendData(data);
+        if(response.success) {
+            await dispatch(getDataPage());
+        }
+        await dispatch(setIsAjaxAction(false));
+    }
 }
 
-export const addColumnAction = (): AddRowActionType => ({type: ADD_ROW});
-
-type AddColumnActionType = {
-    type: typeof ADD_COLUMN
+export const getDataPage = (): ThunkType => {
+    return async (dispatch) => {
+        await dispatch(setIsAjaxAction(true));
+        const response = await pageAPI.getData();
+        if(response.success) {
+            await dispatch(setPageDataAction(response.data));
+        }
+        await dispatch(setIsAjaxAction(false));
+    }
 }
 
-export const addRowAction = (): AddColumnActionType => ({type: ADD_COLUMN});
-
-type DeleteRowActionType = {
-    type: typeof DELETE_ROW
-    index: number
-}
-
-export const deleteRowAction = (index: number): DeleteRowActionType => ({type: DELETE_ROW, index});
-
-type DeleteColumnActionType = {
-    type: typeof DELETE_COLUMN
-    index: number
-}
-
-export const deleteColumnAction = (index: number): DeleteColumnActionType => ({type: DELETE_COLUMN, index});
 
 export default pageReducer;

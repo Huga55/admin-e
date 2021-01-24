@@ -9,6 +9,7 @@
 
 .order__back {
     margin-bottom: 20px;
+    color: #000;
 }
 
 .order__top {
@@ -42,4 +43,25 @@
 .order__create {
     margin-right: 0;
     margin-left: auto;
+}
+
+.order__destroy {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.order__delete {
+    padding: 5px;
+    border: 1px solid red;
+    border-radius: 14px;
+}
+
+.order__exact {
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 14px;
+    background: red;
+    opacity: 0.6;
+    color: #fff;
 }
